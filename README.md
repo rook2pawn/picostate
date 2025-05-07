@@ -1,6 +1,6 @@
 Tiny finite state machine with optional guards and side effects — ideal for driving AI conversations, UI state, async workflows, and beyond.
 
-✨ Features
+# ✨ Features
 * Tiny API surface
 * Clean state transition logic
 * Optional guard conditions before entering a state
@@ -9,13 +9,13 @@ Tiny finite state machine with optional guards and side effects — ideal for dr
 * Fully synchronous and testable
 * Zero dependencies
 
-🚀 Install
+# 🚀 Install
 ```
 npm install picostate
 ```
 
-🧠 Example
-```
+# 🧠 Example
+```js
 import { createFSM } from 'picostate';
 
 const fsm = createFSM({
@@ -35,14 +35,14 @@ fsm.emit('activate');
 console.log(fsm.state); // => maybe 'listening' or stays 'idle' if blocked
 ```
 
-🧪 Testing
+# 🧪 Testing
 ```
 npm test
 ```
 
 Uses tape for simple test definitions. See tests/test.js.
 
-📚 API
+# 📚 API
 
 createFSM(transitions, initialState?)
 Creates a finite state machine.
@@ -67,5 +67,5 @@ const fsm = createFSM({
 .guard(event: string, fn: () => boolean)
 // Prevent a transition unless the guard condition passes.
 ```
-🗃 License
+# 🗃 License
 MIT © 2025 @rook2pawn
