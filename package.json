@@ -12,9 +12,13 @@
     "state",
     "machine"
   ],
+  "type": "module",
   "author": "David Wee <rook2pawn@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "tape": "^5.9.0"
+  },
+  "dependencies": {
+    "@rook2pawn/picobus": "^2.0.1"
   }
 }

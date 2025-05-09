@@ -16,9 +16,9 @@ npm install picostate
 
 # 🧠 Example
 ```js
-import { createFSM } from 'picostate';
+import { PicoState } from 'picostate';
 
-const fsm = createFSM({
+const fsm = PicoState('idle', {
   idle: { activate: 'listening' },
   listening: { got_transcript: 'thinking' },
   thinking: { got_response: 'speaking' },
@@ -44,11 +44,11 @@ Uses tape for simple test definitions. See tests/test.js.
 
 # 📚 API
 
-createFSM(transitions, initialState?)
+## PicoState(initialState, transitions)
 Creates a finite state machine.
 
 ```js
-const fsm = createFSM({
+const fsm = PicoState('idle',{
   idle: { activate: 'listening' },
   listening: { got_transcript: 'thinking' }
 });
