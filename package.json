@@ -1,5 +1,5 @@
 {
-  "name": "picostate",
+  "name": "@rook2pawn/picostate",
   "version": "2.0.1",
   "description": "Tiny finite state machine with optional guards and side effects — UI state, async workflows, and beyond.",
   "main": "index.js",
