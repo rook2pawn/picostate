@@ -1,3 +1,9 @@
+# 🐭 Picostate
+
+https://github.com/rook2pawn/picostate
+
+published on npm as https://www.npmjs.com/package/@rook2pawn/picostate
+
 Tiny finite state machine with optional guards and side effects — ideal for driving AI conversations, UI state, async workflows, and beyond.
 
 # ✨ Features
@@ -18,7 +24,7 @@ npm install picostate
 ```js
 import { PicoState } from 'picostate';
 
-const fsm = PicoState('idle', {
+const fsm = new PicoState('idle', {
   idle: { activate: 'listening' },
   listening: { got_transcript: 'thinking' },
   thinking: { got_response: 'speaking' },
@@ -44,11 +50,11 @@ Uses tape for simple test definitions. See tests/test.js.
 
 # 📚 API
 
-## PicoState(initialState, transitions)
+## new PicoState(initialState, transitions)
 Creates a finite state machine.
 
 ```js
-const fsm = PicoState('idle',{
+const fsm = new PicoState('idle',{
   idle: { activate: 'listening' },
   listening: { got_transcript: 'thinking' }
 });
