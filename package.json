@@ -12,6 +12,12 @@
     "state",
     "machine"
   ],
+  "exports": {
+    ".": {
+      "import": "./picostate.js",
+      "require": "./picostate.js"
+    }
+  },
   "type": "module",
   "author": "David Wee <rook2pawn@gmail.com>",
   "license": "MIT",
