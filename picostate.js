@@ -1,13 +1,21 @@
-import { PicoBus } from '@rook2pawn/picobus';
-import assert from 'assert';
-import { ParallelState } from './parallel-state.js';
+import { PicoBus } from "@rook2pawn/picobus";
+import assert from "assert";
+import { ParallelState } from "./parallel-state.js";
 
 export class PicoState extends PicoBus {
   constructor(initialState, transitions) {
     super();
 
-    assert.equal(typeof initialState, 'string', 'picostate: initialState must be a string');
-    assert.equal(typeof transitions, 'object', 'picostate: transitions must be an object');
+    assert.equal(
+      typeof initialState,
+      "string",
+      "picostate: initialState must be a string"
+    );
+    assert.equal(
+      typeof transitions,
+      "object",
+      "picostate: transitions must be an object"
+    );
 
     this.state = initialState;
     this.transitions = transitions;
@@ -19,19 +27,35 @@ export class PicoState extends PicoBus {
 
   emit(eventName) {
     const nextState = this._next(eventName);
-    assert.ok(nextState, `picostate.emit: invalid transition ${this.state}->${eventName}`);
+    assert.ok(
+      nextState,
+      `picostate.emit: invalid transition ${this.state}->${eventName}`
+    );
 
     if (this._submachine && this.transitions[nextState]) {
       this._unregisterSubmachine();
     }
 
-    const isBlocked = this.guards[eventName] && this.guards[eventName]() === false;
-    if (isBlocked) return;
+    // --- enhanced guard handling: boolean | { ok, reason } ---
+    if (this.guards[eventName]) {
+      const res = this.guards[eventName]();
+      let ok = res;
+      let reason;
+      if (res && typeof res === "object") {
+        ok = !!res.ok;
+        reason = res.reason;
+      }
+      if (ok === false) {
+        // Surface the block without changing emit()’s contract
+        super.emit("guard:blocked", { eventName, state: this.state, reason });
+        return;
+      }
+    }
 
     const prevState = this.state;
     this.state = nextState;
 
-    if (typeof this._onChange === 'function') {
+    if (typeof this._onChange === "function") {
       this._onChange(nextState, prevState);
     }
 
@@ -69,10 +93,16 @@ export class PicoState extends PicoBus {
     }
 
     const currentState = this.transitions[this.state];
-    const wildcardState = this.transitions['*'];
+    const wildcardState = this.transitions["*"];
 
-    if (!currentState || !Object.prototype.hasOwnProperty.call(currentState, eventName)) {
-      if (wildcardState && Object.prototype.hasOwnProperty.call(wildcardState, eventName)) {
+    if (
+      !currentState ||
+      !Object.prototype.hasOwnProperty.call(currentState, eventName)
+    ) {
+      if (
+        wildcardState &&
+        Object.prototype.hasOwnProperty.call(wildcardState, eventName)
+      ) {
         return wildcardState[eventName];
       }
       return null;

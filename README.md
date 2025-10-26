@@ -58,20 +58,44 @@ const fsm = new PicoState('idle',{
   idle: { activate: 'listening' },
   listening: { got_transcript: 'thinking' }
 });
+```
+
+```js
 .emit(event: string)
+```
 // Trigger a transition event. If invalid, it throws.
 
+```js
 .state
 // Get the current state.
+```
 
+```js
 .on(state: string, fn: () => void)
 // Trigger a callback when the machine enters a state.
-
+```
+```js
 .onchange(fn: (state, prevState) => void)
 // Run a callback any time the state changes.
+```
 
-.guard(event: string, fn: () => boolean)
-// Prevent a transition unless the guard condition passes.
+```js
+.guard(event: string, fn: () => boolean | { ok: boolean; reason?: string })
+// Prevents a transition unless the guard passes. Guards can return:
+// true (allow) or false (block), or
+// an object { ok: boolean, reason?: string } for structured feedback.
+// If a guard blocks, the machine emits a guard:blocked event with { eventName, state, reason }.
+
+ps.guard('accelerate', () => {
+  if (fuel < 5) return { ok: false, reason: 'low fuel' };
+  return true; // or { ok: true } — equivalent
+});
+
+// Optional: observe blocks for logging/metrics
+ps.on('guard:blocked', ({ eventName, state, reason }) => {
+  console.warn(`[guard] blocked ${eventName} @ ${state}: ${reason ?? 'unspecified'}`);
+});
+
 ```
 # 🗃 License
 MIT © 2025 @rook2pawn
