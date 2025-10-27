@@ -25,7 +25,7 @@ export class PicoState extends PicoBus {
     this._onChange = null;
   }
 
-  emit(eventName) {
+  emit(eventName, payload) {
     const nextState = this._next(eventName);
     assert.ok(
       nextState,
@@ -35,6 +35,8 @@ export class PicoState extends PicoBus {
     if (this._submachine && this.transitions[nextState]) {
       this._unregisterSubmachine();
     }
+    // announce the attempt (for tracing / metrics)
+    super.emit("emit", { eventName, state: this.state, payload });
 
     // --- enhanced guard handling: boolean | { ok, reason } ---
     if (this.guards[eventName]) {
@@ -47,7 +49,12 @@ export class PicoState extends PicoBus {
       }
       if (ok === false) {
         // Surface the block without changing emit()’s contract
-        super.emit("guard:blocked", { eventName, state: this.state, reason });
+        super.emit("guard:blocked", {
+          eventName,
+          state: this.state,
+          reason,
+          payload,
+        });
         return;
       }
     }
@@ -59,7 +66,13 @@ export class PicoState extends PicoBus {
       this._onChange(nextState, prevState);
     }
 
-    super.emit(nextState);
+    super.emit("transition", {
+      eventName,
+      from: prevState,
+      to: this.state,
+      payload,
+    });
+    super.emit(nextState, payload);
   }
 
   onchange(cb) {
