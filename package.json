@@ -1,6 +1,6 @@
 {
   "name": "@rook2pawn/picostate",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Tiny finite state machine with optional guards and side effects — UI state, async workflows, and beyond.",
   "main": "index.js",
   "scripts": {
