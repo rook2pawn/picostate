@@ -1,21 +1,9 @@
 import { PicoBus } from "@rook2pawn/picobus";
-import assert from "assert";
 import { ParallelState } from "./parallel-state.js";
 
 export class PicoState extends PicoBus {
   constructor(initialState, transitions) {
     super();
-
-    assert.equal(
-      typeof initialState,
-      "string",
-      "picostate: initialState must be a string"
-    );
-    assert.equal(
-      typeof transitions,
-      "object",
-      "picostate: transitions must be an object"
-    );
 
     this.state = initialState;
     this.transitions = transitions;
@@ -27,11 +15,6 @@ export class PicoState extends PicoBus {
 
   emit(eventName, payload) {
     const nextState = this._next(eventName);
-    assert.ok(
-      nextState,
-      `picostate.emit: invalid transition ${this.state}->${eventName}`
-    );
-
     if (this._submachine && this.transitions[nextState]) {
       this._unregisterSubmachine();
     }
