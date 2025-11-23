@@ -25,7 +25,7 @@ npm install picostate
 # 🧠 Example
 
 ```js
-import { PicoState } from "picostate";
+import { PicoState } from "@rook2pawn/picostate";
 
 const fsm = new PicoState("idle", {
   idle: { activate: "listening" },
