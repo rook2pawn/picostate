@@ -2,7 +2,7 @@
   "name": "@rook2pawn/picostate",
   "version": "2.0.7",
   "description": "Tiny finite state machine with optional guards and side effects — UI state, async workflows, and beyond.",
-  "main": "index.js",
+  "main": "picostate.js",
   "scripts": {
     "test": "tape ./test/*.js"
   },
@@ -14,6 +14,7 @@
   ],
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./picostate.js",
       "require": "./picostate.js"
     }
