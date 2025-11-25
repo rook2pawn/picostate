@@ -42,6 +42,11 @@ export class PicoState extends PicoBus {
       }
     }
 
+    //  NEW: if there's no valid transition, do nothing
+    if (nextState == null) {
+      return;
+    }
+
     const prevState = this.state;
     this.state = nextState;
 
