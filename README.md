@@ -44,6 +44,17 @@ fsm.emit("activate");
 console.log(fsm.state); // => maybe 'listening' or stays 'idle' if blocked
 ```
 
+## Payload transfer
+
+You can also provide a payload on state changes, for example
+
+```ts
+fsm.on("speaking", ({ text }) => {
+  console.log(`Now speaking...${text}`);
+});
+fsm.emit("got_response", { text: "Yes please" });
+```
+
 # 🧪 Testing
 
 ```

@@ -37,7 +37,25 @@ test("FSM attempting invalid transition", (t) => {
 
   t.end();
 });
+test("FSM payload transfers", (t) => {
+  const fsm = new PicoState("idle", {
+    idle: { start: "running" },
+    running: { stop: "idle" },
+  });
+  fsm.on("running", ({ foo }) => {
+    t.equal(foo, "bar", "payload is transferred");
+  });
 
+  t.equal(fsm.state, "idle", "Starts in idle");
+
+  fsm.emit("start", { foo: "bar" });
+  t.equal(fsm.state, "running", "Transitioned to running");
+
+  fsm.emit("stop");
+  t.equal(fsm.state, "idle", "Returned to idle");
+
+  t.end();
+});
 // === Guards Prevent Transitions ===
 test("FSM guard blocks invalid transition", (t) => {
   const fsm = new PicoState("idle", {
