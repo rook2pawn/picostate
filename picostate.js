@@ -8,16 +8,11 @@ export class PicoState extends PicoBus {
     this.state = initialState;
     this.transitions = transitions;
     this.guards = {};
-    this.submachines = {};
-    this._submachine = null;
     this._onChange = null;
   }
 
   emit(eventName, payload) {
     const nextState = this._next(eventName);
-    if (this._submachine && this.transitions[nextState]) {
-      this._unregisterSubmachine();
-    }
     // announce the attempt (for tracing / metrics)
     super.emit("emit", { eventName, state: this.state, payload });
 
@@ -71,28 +66,7 @@ export class PicoState extends PicoBus {
     this.guards[eventName] = conditionFn;
   }
 
-  event(eventName, subMachine) {
-    this.submachines[eventName] = subMachine;
-  }
-
-  _unregisterSubmachine() {
-    if (this._submachine) {
-      this._submachine._unregisterSubmachine?.();
-      this._submachine = null;
-    }
-  }
-
   _next(eventName) {
-    if (this._submachine) {
-      const subNext = this._submachine._next(eventName);
-      if (subNext) return subNext;
-    }
-
-    if (this.submachines[eventName]) {
-      this._submachine = this.submachines[eventName];
-      return this._submachine.state;
-    }
-
     const currentState = this.transitions[this.state];
     const wildcardState = this.transitions["*"];
 

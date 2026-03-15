@@ -17,7 +17,6 @@ export class PicoState extends PicoBus {
   emit(eventName: string, payload?: any): void;
   onchange(cb: (nextState: string, prevState: string) => void): void;
   guard(eventName: string, conditionFn: () => GuardResult): void;
-  event(eventName: string, subMachine: PicoState): void;
   static parallel(stateMap: Record<string, PicoState>): ParallelState;
 }
 

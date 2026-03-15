@@ -15,6 +15,7 @@ Tiny finite state machine with optional guards and side effects — ideal for dr
 - Parallel FSM support (like bold, italic, underline)
 - Fully synchronous and testable
 - Zero dependencies
+- Flat FSM model only; temporary flows should be modeled as explicit states
 
 # 🚀 Install
 
@@ -80,7 +81,7 @@ const fsm = new PicoState("idle", {
 .emit(event: string)
 ```
 
-// Trigger a transition event. If invalid, it throws.
+// Trigger a transition event. If invalid, it is a no-op.
 
 ```js
 .state
@@ -115,6 +116,13 @@ ps.on('guard:blocked', ({ eventName, state, reason }) => {
 });
 
 ```
+
+## Design note
+
+`PicoState` intentionally exposes a flat finite-state model. Nested or child
+state machines are not part of the supported public API. If you need a
+temporary mode or override flow, model it as explicit states in the same
+machine.
 
 # API Probe events
 

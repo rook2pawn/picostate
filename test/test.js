@@ -37,6 +37,17 @@ test("FSM attempting invalid transition", (t) => {
 
   t.end();
 });
+
+test("FSM does not expose nested event machine API", (t) => {
+  const fsm = new PicoState("idle", {
+    idle: { start: "running" },
+    running: { stop: "idle" },
+  });
+
+  t.equal(typeof fsm.event, "undefined", "nested event API is not public");
+
+  t.end();
+});
 test("FSM payload transfers", (t) => {
   const fsm = new PicoState("idle", {
     idle: { start: "running" },
